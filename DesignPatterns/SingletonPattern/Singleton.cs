@@ -7,10 +7,14 @@ public sealed class Singleton
     // Singleton 的构造函数应该始终是私有的，以防止使用“new”运算符直接构造调用。
     private Singleton() { }
 
-    // Singleton 实例存储在静态字段中。有多种初始化此字段的方法，它们各有优缺点。在本例中，我们将展示这些方法中最简单的一种，然而，这种方法在多线程程序中实际上并不适用。
+    // Singleton 实例存储在静态字段中。
+    // 有多种初始化此字段的方法，它们各有优缺点。
+    // 在本例中，我们将展示这些方法中最简单的一种，然而，这种方法在多线程程序中实际上并不适用。
     private static Singleton? _instance;
 
-    // 这是控制对Singleton实例访问的静态方法。在第一次运行时，它创建一个Singleton对象并将其放置到静态字段中。在随后的运行中，它返回存储在静态字段中的现有客户端对象。
+    // 这是控制对Singleton实例访问的静态方法。
+    // 在第一次运行时，它创建一个Singleton对象并将其放置到静态字段中。
+    // 在随后的运行中，它返回存储在静态字段中的现有客户端对象。
     public static Singleton GetInstance()
     {
         _instance ??= new Singleton();
