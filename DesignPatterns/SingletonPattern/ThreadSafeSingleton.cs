@@ -2,7 +2,7 @@ namespace DesignPatterns.SingletonPattern;
 
 using System.Threading;
 
-// 这种 Singleton 实现被称为“双重检查锁”。
+// 这种 Singleton 实现被称为“线程安全的懒加载（双重检查锁）”。
 // 它在多线程环境中是安全的，并为 Singleton 对象提供了延迟初始化。
 public sealed class ThreadSafeSingleton
 {
@@ -38,3 +38,9 @@ public sealed class ThreadSafeSingleton
     // 我们将使用此属性来证明我们的 Singleton 确实有效。
     public string Value { get; set; } = null!;
 }
+
+// 优点：
+// 使用了双重检查锁，确保在多线程环境中只创建一个实例。
+// lock 只在第一次创建实例时起作用，之后不会影响性能。
+// 缺点：
+// 稍微复杂，但更可靠。

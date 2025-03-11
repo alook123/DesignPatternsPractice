@@ -21,10 +21,7 @@ public sealed class Singleton
         return _instance;
     }
 
-    // 最后，任何Singleton都应该定义一些业务逻辑，这些逻辑可以在其实例上执行。
-    public void SomeBusinessLogic()
-    {
-        // ...
-    }
+    // 我们将使用此属性来证明我们的 Singleton 确实有效。
+    public string Value { get; set; } = null!;
 }
 
