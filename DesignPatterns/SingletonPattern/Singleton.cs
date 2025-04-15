@@ -15,13 +15,13 @@ public sealed class Singleton
     // 这是控制对Singleton实例访问的静态方法。
     // 在第一次运行时，它创建一个Singleton对象并将其放置到静态字段中。
     // 在随后的运行中，它返回存储在静态字段中的现有客户端对象。
-    public static Singleton GetInstance()
-    {
-        _instance ??= new Singleton();
-        return _instance;
-    }
-
-    // 我们将使用此属性来证明我们的 Singleton 确实有效。
-    public string Value { get; set; } = null!;
+    public static Singleton GetInstance() => _instance ??= new Singleton();
 }
-
+// 优点：
+// 代码简单易懂。
+// 只在第一次调用时创建实例，节省资源。
+// 适用于单线程环境。
+// 缺点：
+// 线程不安全。
+// 如果多个线程同时访问 `GetInstance` 方法，可能会创建多个实例。
+// 这可能会导致不必要的资源浪费和潜在的错误。

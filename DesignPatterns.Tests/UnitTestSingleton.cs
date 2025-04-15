@@ -8,65 +8,76 @@ public class UnitTestSingleton
     public void TestSingleton()
     {
         Singleton s1 = Singleton.GetInstance();
-        Console.WriteLine(s1.Value);
         Singleton s2 = Singleton.GetInstance();
-        Console.WriteLine(s2.Value);
-
-        if (s1 == s2)
-        {
-            Console.WriteLine("Singleton 有效，两个变量包含相同的实例。");
-        }
-        else
-        {
-            Console.WriteLine("Singleton 失败，两个变量包含不同的实例。");
-        }
+        Assert.Equal(s1, s2);
     }
 
     [Fact]
-    public void TestThreadSafeSingleton()
+    public async Task TestSingletonAsync()
     {
-        Console.WriteLine($"{"如果您看到相同的值，则单例被重用了（耶！）"}\n{"如果您看到不同的值，则表示创建了 2 个单例（嘘！！）"}\n\n{"结果:"}\n");
+        Singleton? s1 = null;
+        Singleton? s2 = null;
 
-        Thread process1 = new(() =>
+        async Task RunTasksAsync()
         {
-            ThreadSafeSingleton singleton = ThreadSafeSingleton.GetInstance("FOO");
-            Console.WriteLine(singleton.Value);
-        });
-        Thread process2 = new(() =>
-        {
-            ThreadSafeSingleton singleton = ThreadSafeSingleton.GetInstance("BAR");
-            Console.WriteLine(singleton.Value);
-        });
+            var task1 = Task.Run(() => s1 = Singleton.GetInstance());
+            var task2 = Task.Run(() => s2 = Singleton.GetInstance());
 
-        process1.Start();
-        process2.Start();
-
-        process1.Join();
-        process2.Join();
+            await Task.WhenAll(task1, task2);
+        }
+        await RunTasksAsync();
+        Assert.Equal(s1, s2);
     }
 
     [Fact]
-    public void TestLazySingleton()
+    public async Task TestStaticSingletonAsync()
     {
-        Console.WriteLine($"{"如果您看到相同的值，则单例被重用了（耶！）"}\n{"如果您看到不同的值，则表示创建了 2 个单例（嘘！！）"}\n\n{"结果:"}\n");
+        StaticSingleton? s1 = null;
+        StaticSingleton? s2 = null;
 
-        Thread process1 = new(() =>
+        async Task RunTasksAsync()
         {
-            LazySingleton singleton = LazySingleton.Instance;
-            singleton.Value = "FOO";
-            Console.WriteLine(singleton.Value);
-        });
-        Thread process2 = new(() =>
+            var task1 = Task.Run(() => s1 = StaticSingleton.GetInstance());
+            var task2 = Task.Run(() => s2 = StaticSingleton.GetInstance());
+
+            await Task.WhenAll(task1, task2);
+        }
+        await RunTasksAsync();
+        Assert.Equal(s1, s2);
+    }
+
+    [Fact]
+    public async Task TestThreadSafeSingletonAsync()
+    {
+        ThreadSafeSingleton? s1 = null;
+        ThreadSafeSingleton? s2 = null;
+
+        async Task RunTasksAsync()
         {
-            LazySingleton singleton = LazySingleton.Instance;
-            singleton.Value = "BAR";
-            Console.WriteLine(singleton.Value);
-        });
+            var task1 = Task.Run(() => s1 = ThreadSafeSingleton.GetInstance());
+            var task2 = Task.Run(() => s2 = ThreadSafeSingleton.GetInstance());
 
-        process1.Start();
-        process2.Start();
+            await Task.WhenAll(task1, task2);
+        }
+        await RunTasksAsync();
+        Assert.Equal(s1, s2);
 
-        process1.Join();
-        process2.Join();
+    }
+
+    [Fact]
+    public async Task TestLazySingletonAsync()
+    {
+        LazySingleton? s1 = null;
+        LazySingleton? s2 = null;
+
+        async Task RunTasksAsync()
+        {
+            var task1 = Task.Run(() => s1 = LazySingleton.GetInstance());
+            var task2 = Task.Run(() => s2 = LazySingleton.GetInstance());
+
+            await Task.WhenAll(task1, task2);
+        }
+        await RunTasksAsync();
+        Assert.Equal(s1, s2);
     }
 }

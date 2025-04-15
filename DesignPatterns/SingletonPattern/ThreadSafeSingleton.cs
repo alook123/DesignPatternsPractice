@@ -13,7 +13,7 @@ public sealed class ThreadSafeSingleton
     // 我们现在有一个锁对象，它将用于在第一次访问 Singleton 时同步线程。
     private static readonly Lock _lock = new();
 
-    public static ThreadSafeSingleton GetInstance(string value)
+    public static ThreadSafeSingleton GetInstance()
     {
         // 一旦实例准备就绪，就需要此条件来防止线程因锁而失败。
         if (_instance == null)
@@ -26,21 +26,22 @@ public sealed class ThreadSafeSingleton
                 // 第一个获取锁的线程到达此条件，进入内部并创建 Singleton 实例。
                 // 一旦它离开锁块，可能一直在等待锁释放的线程可能会进入此部分。
                 // 但由于 Singleton 字段已初始化，因此线程不会创建新对象。
-                _instance ??= new ThreadSafeSingleton
-                {
-                    Value = value
-                };
+                _instance ??= new();
             }
         }
         return _instance;
     }
-
-    // 我们将使用此属性来证明我们的 Singleton 确实有效。
-    public string Value { get; set; } = null!;
 }
 
 // 优点：
 // 使用了双重检查锁，确保在多线程环境中只创建一个实例。
 // lock 只在第一次创建实例时起作用，之后不会影响性能。
+// 适用于多线程环境。
+// 允许延迟初始化，只有在第一次访问时才创建实例。
+// 语法清晰，易于理解。
 // 缺点：
 // 稍微复杂，但更可靠。
+// 需要使用锁，可能会影响性能。
+// 需要注意锁的粒度，避免死锁。
+// 可能会引入额外的内存开销，尤其是在高并发情况下。
+// 需要确保锁对象的可见性，避免使用不安全的锁。
