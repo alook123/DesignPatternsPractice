@@ -1,4 +1,5 @@
-﻿using DesignPatterns.SingletonPattern;
+﻿using System.Collections.Concurrent;
+using DesignPatterns.SingletonPattern;
 
 namespace DesignPatterns.Tests;
 
@@ -15,69 +16,108 @@ public class UnitTestSingleton
     [Fact]
     public async Task TestSingletonAsync()
     {
-        Singleton? s1 = null;
-        Singleton? s2 = null;
+        const int taskCount = 1000;
+        ConcurrentBag<Singleton?> instances = [];
 
-        async Task RunTasksAsync()
+        Task CreateInstanceAsync(int index)
         {
-            var task1 = Task.Run(() => s1 = Singleton.GetInstance());
-            var task2 = Task.Run(() => s2 = Singleton.GetInstance());
-
-            await Task.WhenAll(task1, task2);
+            instances.Add(Singleton.GetInstance());
+            return Task.CompletedTask;
         }
-        await RunTasksAsync();
-        Assert.Equal(s1, s2);
+
+        var tasks = Enumerable
+            .Range(0, taskCount)
+            .Select(i => Task.Run(async () => await CreateInstanceAsync(i)))
+            .ToArray();
+
+        await Task.WhenAll(tasks);
+
+        Assert.NotNull(instances.First());
+        for (int i = 1; i < taskCount; i++)
+        {
+            Assert.True(instances.TryTake(out Singleton? instance));
+            Assert.NotNull(instance);
+            Assert.Equal(instance, instances.First());
+        }
     }
 
     [Fact]
     public async Task TestStaticSingletonAsync()
     {
-        StaticSingleton? s1 = null;
-        StaticSingleton? s2 = null;
+        const int taskCount = 1000;
+        ConcurrentBag<StaticSingleton?> instances = [];
 
-        async Task RunTasksAsync()
+        Task CreateInstanceAsync(int index)
         {
-            var task1 = Task.Run(() => s1 = StaticSingleton.GetInstance());
-            var task2 = Task.Run(() => s2 = StaticSingleton.GetInstance());
-
-            await Task.WhenAll(task1, task2);
+            instances.Add(StaticSingleton.GetInstance());
+            return Task.CompletedTask;
         }
-        await RunTasksAsync();
-        Assert.Equal(s1, s2);
+
+        var tasks = Enumerable
+            .Range(0, taskCount)
+            .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
+
+        await Task.WhenAll(tasks);
+
+        Assert.NotNull(instances.First());
+        for (int i = 1; i < taskCount; i++)
+        {
+            Assert.True(instances.TryTake(out StaticSingleton? instance));
+            Assert.NotNull(instance);
+            Assert.Equal(instance, instances.First());
+        }
     }
 
     [Fact]
     public async Task TestThreadSafeSingletonAsync()
     {
-        ThreadSafeSingleton? s1 = null;
-        ThreadSafeSingleton? s2 = null;
+        const int taskCount = 1000;
+        ConcurrentBag<ThreadSafeSingleton?> instances = [];
 
-        async Task RunTasksAsync()
+        Task CreateInstanceAsync(int index)
         {
-            var task1 = Task.Run(() => s1 = ThreadSafeSingleton.GetInstance());
-            var task2 = Task.Run(() => s2 = ThreadSafeSingleton.GetInstance());
-
-            await Task.WhenAll(task1, task2);
+            instances.Add(ThreadSafeSingleton.GetInstance());
+            return Task.CompletedTask;
         }
-        await RunTasksAsync();
-        Assert.Equal(s1, s2);
 
+        var tasks = Enumerable
+            .Range(0, taskCount)
+            .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
+
+        await Task.WhenAll(tasks);
+
+        Assert.NotNull(instances.First());
+        for (int i = 1; i < taskCount; i++)
+        {
+            Assert.True(instances.TryTake(out ThreadSafeSingleton? instance));
+            Assert.NotNull(instance);
+            Assert.Equal(instance, instances.First());
+        }
     }
 
     [Fact]
     public async Task TestLazySingletonAsync()
     {
-        LazySingleton? s1 = null;
-        LazySingleton? s2 = null;
+        const int taskCount = 1000;
+        ConcurrentBag<LazySingleton?> instances = [];
 
-        async Task RunTasksAsync()
+        async Task CreateInstanceAsync(int index)
         {
-            var task1 = Task.Run(() => s1 = LazySingleton.GetInstance());
-            var task2 = Task.Run(() => s2 = LazySingleton.GetInstance());
-
-            await Task.WhenAll(task1, task2);
+            instances.Add(await LazySingleton.GetInstance());
         }
-        await RunTasksAsync();
-        Assert.Equal(s1, s2);
+
+        var tasks = Enumerable
+            .Range(0, taskCount)
+            .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
+
+        await Task.WhenAll(tasks);
+
+        Assert.NotNull(instances.First());
+        for (int i = 1; i < taskCount; i++)
+        {
+            Assert.True(instances.TryTake(out LazySingleton? instance));
+            Assert.NotNull(instance);
+            Assert.Equal(instance, instances.First());
+        }
     }
 }

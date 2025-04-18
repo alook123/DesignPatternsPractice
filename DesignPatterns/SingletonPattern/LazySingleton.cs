@@ -7,9 +7,9 @@ public sealed class LazySingleton
     // 使用 Lazy<T> 类型来实现线程安全的延迟初始化。
     private static readonly Lazy<LazySingleton> _instance = new(() => new LazySingleton());
 
-    public static LazySingleton GetInstance()
+    public static async Task<LazySingleton> GetInstance()
     {
-        return _instance.Value;
+        return await Task.FromResult(_instance.Value);
     }
 }
 
