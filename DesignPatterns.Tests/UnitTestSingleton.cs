@@ -101,9 +101,10 @@ public class UnitTestSingleton
         const int taskCount = 1000;
         ConcurrentBag<LazySingleton?> instances = [];
 
-        async Task CreateInstanceAsync(int index)
+        Task CreateInstanceAsync(int index)
         {
-            instances.Add(await LazySingleton.GetInstance());
+            instances.Add(LazySingleton.GetInstance());
+            return Task.CompletedTask;
         }
 
         var tasks = Enumerable
