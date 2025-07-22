@@ -403,3 +403,8 @@ FodyWeavers.xsd
 *.sln.iml
 # Mac
 *.DS_Store
+
+
+# 忽略 bin 和 obj 文件夹
+bin/
+obj/
