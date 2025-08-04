@@ -12,7 +12,7 @@ public abstract class DocumentCreator
     public string EditDocument()
     {
         // 调用工厂方法创建一个文档对象
-        var document = CreateDocument();
+        IDocument document = CreateDocument();
 
         // 使用文档
         return $"编辑器: 正在编辑 {document.GetType().Name} - {document.Open()}";

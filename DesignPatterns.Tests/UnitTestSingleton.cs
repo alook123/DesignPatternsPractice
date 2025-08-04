@@ -1,5 +1,5 @@
-﻿using System.Collections.Concurrent;
-using DesignPatterns.SingletonPattern;
+﻿using DesignPatterns.SingletonPattern;
+using System.Collections.Concurrent;
 
 namespace DesignPatterns.Tests;
 
@@ -25,7 +25,7 @@ public class UnitTestSingleton
             return Task.CompletedTask;
         }
 
-        var tasks = Enumerable
+        Task[] tasks = Enumerable
             .Range(0, taskCount)
             .Select(i => Task.Run(async () => await CreateInstanceAsync(i)))
             .ToArray();
@@ -53,7 +53,7 @@ public class UnitTestSingleton
             return Task.CompletedTask;
         }
 
-        var tasks = Enumerable
+        IEnumerable<Task> tasks = Enumerable
             .Range(0, taskCount)
             .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
 
@@ -80,7 +80,7 @@ public class UnitTestSingleton
             return Task.CompletedTask;
         }
 
-        var tasks = Enumerable
+        IEnumerable<Task> tasks = Enumerable
             .Range(0, taskCount)
             .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
 
@@ -107,7 +107,7 @@ public class UnitTestSingleton
             return Task.CompletedTask;
         }
 
-        var tasks = Enumerable
+        IEnumerable<Task> tasks = Enumerable
             .Range(0, taskCount)
             .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
 

@@ -79,13 +79,13 @@ public class AdvancedApplication
     public void RunParameterized()
     {
         // 使用参数化工厂
-        var factory = new ParameterizedDocumentFactory();
+        ParameterizedDocumentFactory factory = new ParameterizedDocumentFactory();
 
         // 创建不同类型的文档
-        var pdfDoc = factory.CreateDocument(DocumentType.PDF);
-        var wordDoc = factory.CreateDocument(DocumentType.Word);
-        var excelDoc = factory.CreateDocument(DocumentType.Excel);
-        var textDoc = factory.CreateDocument(DocumentType.Text);
+        IDocument pdfDoc = factory.CreateDocument(DocumentType.PDF);
+        IDocument wordDoc = factory.CreateDocument(DocumentType.Word);
+        IDocument excelDoc = factory.CreateDocument(DocumentType.Excel);
+        IDocument textDoc = factory.CreateDocument(DocumentType.Text);
 
         Console.WriteLine(pdfDoc.Open());
         Console.WriteLine(wordDoc.Open());
@@ -96,7 +96,7 @@ public class AdvancedApplication
     public void RunConfigurable()
     {
         // 使用可配置工厂
-        var factory = new ConfigurableDocumentFactory();
+        ConfigurableDocumentFactory factory = new ConfigurableDocumentFactory();
 
         // 注册创建器
         factory.RegisterCreator("pdf", () => new PDFDocument());
@@ -105,15 +105,15 @@ public class AdvancedApplication
         factory.RegisterCreator("text", () => new TextDocument());
 
         // 使用工厂创建产品
-        var pdfDoc = factory.CreateDocument("pdf");
-        var wordDoc = factory.CreateDocument("word");
+        IDocument pdfDoc = factory.CreateDocument("pdf");
+        IDocument wordDoc = factory.CreateDocument("word");
 
         Console.WriteLine(pdfDoc.Open());
         Console.WriteLine(wordDoc.Open());
 
         // 动态注册新的创建器
         factory.RegisterCreator("custom", () => new CustomDocument());
-        var customDoc = factory.CreateDocument("custom");
+        IDocument customDoc = factory.CreateDocument("custom");
         Console.WriteLine(customDoc.Open());
     }
 }

@@ -1,52 +1,47 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
 {
-	"name": "C# (.NET)",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/dotnet:1-9.0-bookworm",
-	"features": {
-		"ghcr.io/devcontainers/features/dotnet:2": {
-			"version": "latest"
-		},
-		"ghcr.io/schlich/devcontainer-features/starship:0": {},
-		"ghcr.io/cirolosapio/devcontainers-features/alpine-ohmyzsh:0": {},
-		"ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
-			"setLocale": true,
-			"theme": "robbyrussell",
-			"plugins": "git docker",
-			"desiredLocale": "en_US.UTF-8 UTF-8"
-		},
-		"ghcr.io/nikiforovall/devcontainer-features/dotnet-csharpier:1": {},
-		"ghcr.io/devcontainers-extra/features/bash-command:1": {
-			"command": "echo hi!"
-		},
-		"ghcr.io/devcontainers-extra/features/fish-apt-get:1": {},
-		"ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
-			"plugins": "ssh-agent npm",
-			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions",
-			"username": "root"
-		},
-		"ghcr.io/davzucky/devcontainers-features-wolfi/bash:1": {},
-		"ghcr.io/braun-daniel/devcontainer-features/fzf:1": {}
-	}
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [5000, 5001],
-	// "portsAttributes": {
-	//		"5001": {
-	//			"protocol": "https"
-	//		}
-	// }
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "dotnet restore",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+    "name": "C# (.NET)",
+    // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+    "image": "mcr.microsoft.com/devcontainers/dotnet:1-9.0-bookworm",
+    "features": {
+        "ghcr.io/devcontainers/features/dotnet:2": {
+            "version": "latest"
+        },
+        "ghcr.io/schlich/devcontainer-features/starship:0": {},
+        "ghcr.io/cirolosapio/devcontainers-features/alpine-ohmyzsh:0": {},
+        "ghcr.io/nils-geistmann/devcontainers-features/zsh:0": {
+            "setLocale": true,
+            "theme": "robbyrussell",
+            "plugins": "git docker",
+            "desiredLocale": "en_US.UTF-8 UTF-8"
+        },
+        "ghcr.io/nikiforovall/devcontainer-features/dotnet-csharpier:1": {},
+        "ghcr.io/devcontainers-extra/features/bash-command:1": {
+            "command": "echo hi!"
+        },
+        "ghcr.io/devcontainers-extra/features/fish-apt-get:1": {},
+        "ghcr.io/devcontainers-extra/features/zsh-plugins:0": {
+            "plugins": "ssh-agent npm",
+            "omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions",
+            "username": "root"
+        },
+        "ghcr.io/davzucky/devcontainers-features-wolfi/bash:1": {},
+        "ghcr.io/braun-daniel/devcontainer-features/fzf:1": {}
+    }
+    // Features to add to the dev container. More info: https://containers.dev/features.
+    // "features": {},
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [5000, 5001],
+    // "portsAttributes": {
+    //		"5001": {
+    //			"protocol": "https"
+    //		}
+    // }
+    // Use 'postCreateCommand' to run commands after the container is created.
+    // "postCreateCommand": "dotnet restore",
+    // Configure tool-specific properties.
+    // "customizations": {},
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
 }

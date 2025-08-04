@@ -12,9 +12,9 @@ public abstract class Creator
     public string SomeOperation()
     {
         // 调用工厂方法创建一个产品对象。
-        var product = FactoryMethod();
+        IProduct product = FactoryMethod();
         // 现在使用产品。
-        var result = $"Creator: 使用 {product.Operation()} 进行工作";
+        string result = $"Creator: 使用 {product.Operation()} 进行工作";
 
         return result;
     }
