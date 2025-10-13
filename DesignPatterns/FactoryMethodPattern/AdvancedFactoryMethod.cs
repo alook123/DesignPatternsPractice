@@ -79,7 +79,7 @@ public class AdvancedApplication
     public void RunParameterized()
     {
         // 使用参数化工厂
-        ParameterizedDocumentFactory factory = new ParameterizedDocumentFactory();
+        ParameterizedDocumentFactory factory = new();
 
         // 创建不同类型的文档
         IDocument pdfDoc = factory.CreateDocument(DocumentType.PDF);
@@ -96,7 +96,7 @@ public class AdvancedApplication
     public void RunConfigurable()
     {
         // 使用可配置工厂
-        ConfigurableDocumentFactory factory = new ConfigurableDocumentFactory();
+        ConfigurableDocumentFactory factory = new();
 
         // 注册创建器
         factory.RegisterCreator("pdf", () => new PDFDocument());
