@@ -151,13 +151,23 @@ ${markdown.replace(/^#\s+.*$/m, '')}`;
         const blocks = markdownToBlocks(enhancedMarkdown);
 
         // 查找是否已存在同名文档
-        const existing = await notion.databases.query({
-            database_id: databaseId,
-            filter: {
-                property: 'Name',
-                title: { equals: metadata.title },
-            },
-        });
+        let existing;
+        try {
+            existing = await notion.databases.query({
+                database_id: databaseId,
+                filter: {
+                    property: 'Name',
+                    title: { 
+                        equals: metadata.title 
+                    },
+                },
+            });
+        } catch (error) {
+            console.log(`⚠️ Query error for ${metadata.title}: ${error.message}`);
+            console.log('📝 Creating new page instead...');
+            // 如果查询失败，尝试创建新页面
+            existing = { results: [] };
+        }
 
         const properties = {
             Name: {
