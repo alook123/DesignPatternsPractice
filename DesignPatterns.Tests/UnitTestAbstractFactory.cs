@@ -17,8 +17,8 @@ public class UnitTestAbstractFactory
         // Assert
         Assert.IsType<ProductA1>(productA);
         Assert.IsType<ProductB1>(productB);
-        Assert.Equal("The result of the product A1.", productA.UsefulFunctionA());
-        Assert.Equal("The result of the product B1.", productB.UsefulFunctionB());
+        Assert.Equal("产品A1的结果。", productA.UsefulFunctionA());
+        Assert.Equal("产品B1的结果。", productB.UsefulFunctionB());
     }
 
     [Fact]
@@ -34,8 +34,8 @@ public class UnitTestAbstractFactory
         // Assert
         Assert.IsType<ProductA2>(productA);
         Assert.IsType<ProductB2>(productB);
-        Assert.Equal("The result of the product A2.", productA.UsefulFunctionA());
-        Assert.Equal("The result of the product B2.", productB.UsefulFunctionB());
+        Assert.Equal("产品A2的结果。", productA.UsefulFunctionA());
+        Assert.Equal("产品B2的结果。", productB.UsefulFunctionB());
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class UnitTestAbstractFactory
         string collaboration1 = productB1.AnotherUsefulFunctionB(productA1);
         string collaboration2 = productB2.AnotherUsefulFunctionB(productA2);
 
-        Assert.Contains("B1 collaborating with the (The result of the product A1.)", collaboration1);
-        Assert.Contains("B2 collaborating with the (The result of the product A2.)", collaboration2);
+        Assert.Contains("B1与(产品A1的结果。)协作的结果。", collaboration1);
+        Assert.Contains("B2与(产品A2的结果。)协作的结果。", collaboration2);
     }
 }
