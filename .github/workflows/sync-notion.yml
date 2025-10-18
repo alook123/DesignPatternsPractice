@@ -1,4 +1,4 @@
-name: Sync Docs to Notion
+name: Sync Docs to Notion Database
 
 on:
     push:
@@ -9,21 +9,13 @@ on:
 jobs:
     sync:
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v4
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v4
+            - uses: actions/setup-node@v4
               with:
                   node-version: 20
-
-            - name: Install dependencies
-              run: npm install @notionhq/client @tryfabric/martian
-
-            - name: Sync to Notion
+            - run: npm install @notionhq/client @tryfabric/martian
+            - run: node .github/scripts/sync-to-notion-db.js
               env:
                   NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-                  NOTION_PARENT_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
-              run: |
-                  node .github/scripts/sync-notion.js
+                  NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
