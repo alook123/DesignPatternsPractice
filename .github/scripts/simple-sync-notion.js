@@ -39,18 +39,36 @@ for (const filePath of files.slice(0, 2)) {
         // 转换为 Notion 块
         const blocks = markdownToBlocks(markdown).slice(0, 50); // 限制块数量
 
+        // 先检查数据库结构
+        const database = await notion.databases.retrieve({ 
+            database_id: databaseId 
+        });
+        
+        // 找到标题属性
+        const titleProperty = Object.entries(database.properties)
+            .find(([key, prop]) => prop.type === 'title');
+        
+        if (!titleProperty) {
+            throw new Error('No title property found in database');
+        }
+        
+        const titlePropertyName = titleProperty[0];
+        console.log(`📝 Using title property: ${titlePropertyName}`);
+        
+        // 创建页面属性
+        const properties = {};
+        properties[titlePropertyName] = {
+            title: [
+                {
+                    text: { content: title },
+                },
+            ],
+        };
+
         // 直接创建页面，不查询现有页面
         const newPage = await notion.pages.create({
             parent: { database_id: databaseId },
-            properties: {
-                Name: {
-                    title: [
-                        {
-                            text: { content: title },
-                        },
-                    ],
-                },
-            },
+            properties: properties,
             children: blocks,
         });
 
