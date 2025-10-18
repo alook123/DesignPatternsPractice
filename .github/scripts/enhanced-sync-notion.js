@@ -157,13 +157,15 @@ ${markdown.replace(/^#\s+.*$/m, '')}`;
                 database_id: databaseId,
                 filter: {
                     property: 'Name',
-                    title: { 
-                        equals: metadata.title 
+                    title: {
+                        equals: metadata.title,
                     },
                 },
             });
         } catch (error) {
-            console.log(`⚠️ Query error for ${metadata.title}: ${error.message}`);
+            console.log(
+                `⚠️ Query error for ${metadata.title}: ${error.message}`
+            );
             console.log('📝 Creating new page instead...');
             // 如果查询失败，尝试创建新页面
             existing = { results: [] };
