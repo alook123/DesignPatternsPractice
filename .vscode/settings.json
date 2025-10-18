@@ -1,3 +1,4 @@
 {
-    "dotnet.defaultSolution": "DesignPatternsSolution.slnx"
+    "dotnet.defaultSolution": "DesignPatternsSolution.slnx",
+    "cSpell.words": ["Creational"]
 }

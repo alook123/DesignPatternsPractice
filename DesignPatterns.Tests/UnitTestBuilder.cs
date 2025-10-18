@@ -1,4 +1,4 @@
-using DesignPatterns.BuilderPattern;
+using DesignPatterns.CreationalPatterns.BuilderPattern;
 
 namespace DesignPatterns.Tests;
 

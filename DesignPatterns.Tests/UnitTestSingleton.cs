@@ -1,4 +1,4 @@
-﻿using DesignPatterns.SingletonPattern;
+﻿using DesignPatterns.CreationalPatterns.SingletonPattern;
 using System.Collections.Concurrent;
 
 namespace DesignPatterns.Tests;
@@ -6,50 +6,14 @@ namespace DesignPatterns.Tests;
 public class UnitTestSingleton
 {
     [Fact]
-    public void TestSingleton()
-    {
-        Singleton s1 = Singleton.GetInstance();
-        Singleton s2 = Singleton.GetInstance();
-        Assert.Equal(s1, s2);
-    }
-
-    [Fact]
-    public async Task TestSingletonAsync()
+    public async Task TestNestedSingletonAsync()
     {
         const int taskCount = 1000;
-        ConcurrentBag<Singleton?> instances = [];
+        ConcurrentBag<NestedSingleton?> instances = [];
 
         Task CreateInstanceAsync(int index)
         {
-            instances.Add(Singleton.GetInstance());
-            return Task.CompletedTask;
-        }
-
-        Task[] tasks = Enumerable
-            .Range(0, taskCount)
-            .Select(i => Task.Run(async () => await CreateInstanceAsync(i)))
-            .ToArray();
-
-        await Task.WhenAll(tasks);
-
-        Assert.NotNull(instances.First());
-        for (int i = 1; i < taskCount; i++)
-        {
-            Assert.True(instances.TryTake(out Singleton? instance));
-            Assert.NotNull(instance);
-            Assert.Equal(instance, instances.First());
-        }
-    }
-
-    [Fact]
-    public async Task TestStaticSingletonAsync()
-    {
-        const int taskCount = 1000;
-        ConcurrentBag<StaticSingleton?> instances = [];
-
-        Task CreateInstanceAsync(int index)
-        {
-            instances.Add(StaticSingleton.GetInstance());
+            instances.Add(NestedSingleton.Instance);
             return Task.CompletedTask;
         }
 
@@ -62,34 +26,7 @@ public class UnitTestSingleton
         Assert.NotNull(instances.First());
         for (int i = 1; i < taskCount; i++)
         {
-            Assert.True(instances.TryTake(out StaticSingleton? instance));
-            Assert.NotNull(instance);
-            Assert.Equal(instance, instances.First());
-        }
-    }
-
-    [Fact]
-    public async Task TestThreadSafeSingletonAsync()
-    {
-        const int taskCount = 1000;
-        ConcurrentBag<ThreadSafeSingleton?> instances = [];
-
-        Task CreateInstanceAsync(int index)
-        {
-            instances.Add(ThreadSafeSingleton.GetInstance());
-            return Task.CompletedTask;
-        }
-
-        IEnumerable<Task> tasks = Enumerable
-            .Range(0, taskCount)
-            .Select(i => Task.Run(async () => await CreateInstanceAsync(i)));
-
-        await Task.WhenAll(tasks);
-
-        Assert.NotNull(instances.First());
-        for (int i = 1; i < taskCount; i++)
-        {
-            Assert.True(instances.TryTake(out ThreadSafeSingleton? instance));
+            Assert.True(instances.TryTake(out NestedSingleton? instance));
             Assert.NotNull(instance);
             Assert.Equal(instance, instances.First());
         }
@@ -103,7 +40,7 @@ public class UnitTestSingleton
 
         Task CreateInstanceAsync(int index)
         {
-            instances.Add(LazySingleton.GetInstance());
+            instances.Add(LazySingleton.Instance);
             return Task.CompletedTask;
         }
 
