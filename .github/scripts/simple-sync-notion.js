@@ -20,6 +20,9 @@ if (!process.env.NOTION_DATABASE_ID) {
     process.exit(1);
 }
 
+console.log(`🔑 Using database ID: ${process.env.NOTION_DATABASE_ID}`);
+console.log(`🎫 Token length: ${process.env.NOTION_TOKEN ? process.env.NOTION_TOKEN.length : 'undefined'} chars`);
+
 // 收集文档
 const files = glob.sync('./docs/**/*.md');
 console.log(`🔍 Found ${files.length} markdown files`);
@@ -44,11 +47,19 @@ for (const filePath of files.slice(0, 2)) {
             database_id: databaseId 
         });
         
+        console.log(`🔍 Database retrieved:`, JSON.stringify(database, null, 2).substring(0, 500));
+        
+        // 检查 properties 是否存在
+        if (!database || !database.properties) {
+            throw new Error(`Database properties not found. Database object: ${JSON.stringify(database)}`);
+        }
+        
         // 找到标题属性
         const titleProperty = Object.entries(database.properties)
             .find(([key, prop]) => prop.type === 'title');
         
         if (!titleProperty) {
+            console.log('Available properties:', Object.keys(database.properties));
             throw new Error('No title property found in database');
         }
         
