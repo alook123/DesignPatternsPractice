@@ -5,7 +5,7 @@ on:
         branches:
             - main
         paths:
-            - 'docs/**'
+            - 'docs/**/*.md'
 
 jobs:
     sync:
@@ -28,15 +28,39 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
+                  # 清理并复制文档
                   rm -rf wiki/*
-                  cp -r docs/* wiki/
+
+                  # 创建简单的首页
+                  cat > wiki/Home.md << 'EOF'
+                  # 设计模式实践指南
+
+                  ## 🏗️ 创建型模式
+                  - [单例模式](SingletonPattern)
+                  - [工厂方法模式](FactoryMethodPattern) 
+                  - [抽象工厂模式](AbstractFactoryPattern)
+                  - [建造者模式](BuilderPattern)
+                  - [原型模式](PrototypePattern)
+
+                  ## 🔧 结构型模式
+                  - [适配器模式](AdapterPattern)
+
+                  ## 📊 对比总结
+                  - [创建型模式对比](CreationalPatternsComparison)
+                  EOF
+
+                  # 直接复制文档
+                  cp docs/CreationalPatterns/*.md wiki/
+                  cp docs/StructuralPatterns/*.md wiki/
+                  cp docs/Comparisons/*.md wiki/
+                  cp docs/Getting-Started.md docs/FAQ.md docs/NOTION_SETUP.md wiki/
+
+                  # 提交到 Wiki
                   cd wiki
                   git config user.name "github-actions[bot]"
                   git config user.email "github-actions[bot]@users.noreply.github.com"
-
-                  # ✅ 使用内置 token 进行身份验证
                   git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.wiki.git
 
                   git add .
-                  git commit -m "Sync docs from main branch" || echo "No changes to commit"
-                  git push origin main || git push || echo "Push done"
+                  git commit -m "📚 Sync docs" || echo "No changes"
+                  git push origin master || echo "Push completed"
