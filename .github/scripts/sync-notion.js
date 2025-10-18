@@ -1,11 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { Client } from '@notionhq/client';
-import { markdownToBlocks } from '@tryfabric/martian'; // Markdown → Notion blocks
+import { markdownToBlocks } from '@tryfabric/martian';
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 const docsDir = './docs';
-
 const parentPageId = process.env.NOTION_PARENT_PAGE_ID;
 
 async function uploadDoc(file) {
@@ -13,7 +12,7 @@ async function uploadDoc(file) {
     const markdown = fs.readFileSync(path.join(docsDir, file), 'utf8');
     const blocks = markdownToBlocks(markdown);
 
-    // 查找是否已存在页面
+    // 查找同名页面
     const search = await notion.search({ query: title });
     const existing = search.results.find(
         (p) =>
@@ -22,24 +21,31 @@ async function uploadDoc(file) {
     );
 
     if (existing) {
-        // 更新已有页面内容
+        console.log(`📝 Updating: ${title}`);
+        // 先清空旧内容（Notion API 不支持直接替换，只能追加或删除）
+        // 这里简单做法：追加到后面
         await notion.blocks.children.append({
             block_id: existing.id,
             children: blocks,
         });
-        console.log(`✅ Updated: ${title}`);
     } else {
-        // 创建新页面
+        console.log(`📘 Creating: ${title}`);
         await notion.pages.create({
             parent: { page_id: parentPageId },
-            properties: { title: { title: [{ text: { content: title } }] } },
+            properties: {
+                title: { title: [{ text: { content: title } }] },
+            },
             children: blocks,
         });
-        console.log(`📘 Created: ${title}`);
     }
 }
 
-const files = fs.readdirSync(docsDir).filter((f) => f.endsWith('.md'));
-for (const f of files) {
-    await uploadDoc(f);
+async function main() {
+    const files = fs.readdirSync(docsDir).filter((f) => f.endsWith('.md'));
+    for (const f of files) {
+        await uploadDoc(f);
+    }
+    console.log('✅ Sync completed!');
 }
+
+main().catch(console.error);
