@@ -18,14 +18,14 @@ if (!process.env.NOTION_DATABASE_ID) {
 
 try {
     // 获取数据库信息
-    const database = await notion.databases.retrieve({ 
-        database_id: databaseId 
+    const database = await notion.databases.retrieve({
+        database_id: databaseId,
     });
 
     console.log('📊 Database Information:');
     console.log('Title:', database.title[0]?.plain_text || 'No title');
     console.log('\n🔑 Available Properties:');
-    
+
     Object.entries(database.properties).forEach(([key, property]) => {
         console.log(`- ${key}: ${property.type}`);
         if (property.type === 'title') {
@@ -37,11 +37,12 @@ try {
     console.log('\n🔐 Testing query permissions...');
     const queryResult = await notion.databases.query({
         database_id: databaseId,
-        page_size: 1
+        page_size: 1,
     });
-    
-    console.log(`✅ Query successful! Found ${queryResult.results.length} existing pages.`);
-    
+
+    console.log(
+        `✅ Query successful! Found ${queryResult.results.length} existing pages.`
+    );
 } catch (error) {
     console.error('❌ Error:', error.message);
     if (error.code) {

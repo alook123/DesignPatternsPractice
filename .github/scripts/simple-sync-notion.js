@@ -21,7 +21,11 @@ if (!process.env.NOTION_DATABASE_ID) {
 }
 
 console.log(`🔑 Using database ID: ${process.env.NOTION_DATABASE_ID}`);
-console.log(`🎫 Token length: ${process.env.NOTION_TOKEN ? process.env.NOTION_TOKEN.length : 'undefined'} chars`);
+console.log(
+    `🎫 Token length: ${
+        process.env.NOTION_TOKEN ? process.env.NOTION_TOKEN.length : 'undefined'
+    } chars`
+);
 
 // 收集文档
 const files = glob.sync('./docs/**/*.md');
@@ -43,29 +47,40 @@ for (const filePath of files.slice(0, 2)) {
         const blocks = markdownToBlocks(markdown).slice(0, 50); // 限制块数量
 
         // 先检查数据库结构
-        const database = await notion.databases.retrieve({ 
-            database_id: databaseId 
+        const database = await notion.databases.retrieve({
+            database_id: databaseId,
         });
-        
-        console.log(`🔍 Database retrieved:`, JSON.stringify(database, null, 2).substring(0, 500));
-        
+
+        console.log(
+            `🔍 Database retrieved:`,
+            JSON.stringify(database, null, 2).substring(0, 500)
+        );
+
         // 检查 properties 是否存在
         if (!database || !database.properties) {
-            throw new Error(`Database properties not found. Database object: ${JSON.stringify(database)}`);
+            throw new Error(
+                `Database properties not found. Database object: ${JSON.stringify(
+                    database
+                )}`
+            );
         }
-        
+
         // 找到标题属性
-        const titleProperty = Object.entries(database.properties)
-            .find(([key, prop]) => prop.type === 'title');
-        
+        const titleProperty = Object.entries(database.properties).find(
+            ([key, prop]) => prop.type === 'title'
+        );
+
         if (!titleProperty) {
-            console.log('Available properties:', Object.keys(database.properties));
+            console.log(
+                'Available properties:',
+                Object.keys(database.properties)
+            );
             throw new Error('No title property found in database');
         }
-        
+
         const titlePropertyName = titleProperty[0];
         console.log(`📝 Using title property: ${titlePropertyName}`);
-        
+
         // 创建页面属性
         const properties = {};
         properties[titlePropertyName] = {
