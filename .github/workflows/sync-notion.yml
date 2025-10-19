@@ -21,10 +21,16 @@ jobs:
             - name: Install dependencies
               run: npm install @notionhq/client @tryfabric/martian glob
 
-            - name: Test Notion Connection
+            - name: Setup Notion Database
               env:
                   NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-                  NOTION_PARENT_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
                   NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
               run: |
-                  node .github/scripts/test-notion-connection.js
+                  node .github/scripts/setup-notion-database.js
+
+            - name: Sync to Notion
+              env:
+                  NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+                  NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+              run: |
+                  node .github/scripts/minimal-sync-notion.js
